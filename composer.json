@@ -1,0 +1,21 @@
+{
+    "name": "laswitchtech/php-router",
+    "description": "Router Class for PHP",
+    "type": "library",
+    "license": "GPL-3.0-only",
+    "authors": [
+        {
+            "name": "Louis Ouellet",
+            "email": "louis_ouellet@hotmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "composer/composer": "^2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaswitchTech\\phpRouter\\": "src/"
+        }
+    }
+}
