@@ -26,7 +26,15 @@ class phpRouter {
       $htaccess .= "</IfModule>\n";
       file_put_contents($this->RootPath . '/.htaccess', $htaccess);
     }
+    if(defined('ROUTER_ROUTES')){
+      $routes = ROUTER_ROUTES;
+      if(is_array($routes)){
+        foreach($routes as $route => $path){ $this->add($route, $path); }
+      }
+    }
   }
+
+  public function get(){ return $this->URI; }
 
   public function add($route, $destination){
     if(!isset($this->Routes[$route]) && is_file($destination)){
@@ -34,11 +42,6 @@ class phpRouter {
       return true;
     }
     return false;
-  }
-
-  public function get($route){
-    if(isset($this->Routes[$route])){ return $this->Routes[$route]; }
-    return $this->RootPath . '/View/404.php';
   }
 
   public function load($route = null){

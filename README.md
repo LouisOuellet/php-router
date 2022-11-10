@@ -52,6 +52,12 @@ Let's start with the skeleton of your project directory.
 ### Routes
 Routes are what indicates the router which file to provide. For example for a route ```/``` the router will load with the file ```View/index.php```.
 
+#### Defining Routes
+You can define routes before loading/initiating the phpRouter.
+```php
+define("ROUTER_ROUTES", ['/' => __DIR__ . '/View/index.php']);
+```
+
 #### Adding Routes
 This is done using the ```add``` method.
 ```php
