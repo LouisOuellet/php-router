@@ -7,8 +7,14 @@ use LaswitchTech\phpRouter\phpRouter;
 //Load Composer's autoloader
 require 'vendor/autoload.php';
 
+//Defining Routes
+define('ROUTER_ROUTES',[
+  "/" => ["view" => "View/index.php"],
+  "404" => ["view" => "View/404.php", "template" => "Template/index.php"],
+]);
+
 //Initiate phpRouter
 $phpRouter = new phpRouter();
 
-//Load Request
-$phpRouter->load();
+//Render Request
+$phpRouter->render();
