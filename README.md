@@ -20,6 +20,7 @@ This software is distributed under the [GNU General Public License v3.0](https:/
 
 ## Requirements
 * PHP >= 5.6
+* Apache2
 
 ## Security
 Please disclose any vulnerabilities found responsibly – report security issues to the maintainers privately.
@@ -52,6 +53,15 @@ Let's start with the skeleton of your project directory.
 * View/: This directory will contain your 404 view. But you can also use it to store additional views.
 * View/404.php: This is the default 404 view file provided by the Router.
 * View/index.php: This is the default index view file provided by the Router.
+
+### Requirements
+Requirements are what indicates the router if it can run the application or not. phpRouter can check both Apache2 modules and PHP modules. If some requirements are not met, phpRouter will throw a HTTP/1.1 500 Internal Error header. Along with some information about the unmet requirement.
+
+#### Adding Requirements
+You can define requirements before loading/initiating the phpRouter.
+```php
+define("ROUTER_REQUIREMENTS", ["APACHE" => ["module1","module2"],"PHP" => ["module1","module2"]]);
+```
 
 ### Routes
 Routes are what indicates the router which file to provide. For example for a route ```/``` the router will load with the file ```View/index.php```.

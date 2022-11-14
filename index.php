@@ -11,7 +11,11 @@ require 'vendor/autoload.php';
 define('ROUTER_ROUTES',[
   "/" => ["view" => "View/index.php"],
   "404" => ["view" => "View/404.php", "template" => "Template/index.php"],
+  "/info" => ["view" => "View/info.php"],
 ]);
+
+//Defining Requirements
+define("ROUTER_REQUIREMENTS", ["APACHE" => ["mod_rewrite"]]);
 
 //Initiate phpRouter
 $phpRouter = new phpRouter();

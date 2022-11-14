@@ -15,22 +15,14 @@ class phpRouter {
   protected $Path = null;
   protected $View = null;
   protected $Template = null;
+  protected $Requirements = ["SERVER" => "APACHE","MODULES" => ["APACHE" => ["mod_rewrite"]]];
 
-  public function __construct() {
+  public function __construct(){
+    $this->checkRequirements();
+    $this->genHTAccess();
     if($this->URI == null){ $this->URI = $_SERVER['REQUEST_URI']; }
     if($this->URI == ''){ $this->URI = '/'; }
     $this->URI = explode('?',$this->URI)[0];
-    if($this->Path == null){ $this->Path = dirname(\Composer\Factory::getComposerFile()); }
-    if(!is_file($this->Path . '/.htaccess')){
-      $htaccess = "<IfModule mod_rewrite.c>\n";
-      $htaccess .= "  RewriteEngine On\n";
-      $htaccess .= "  RewriteBase /\n";
-      $htaccess .= "  RewriteCond %{REQUEST_FILENAME} !-d\n";
-      $htaccess .= "  RewriteCond %{REQUEST_FILENAME} !-f\n";
-      $htaccess .= "  RewriteRule ^(.+)$ index.php [QSA,L]\n";
-      $htaccess .= "</IfModule>\n";
-      file_put_contents($this->Path . '/.htaccess', $htaccess);
-    }
     $this->add('404','View/404.php');
     if(defined('ROUTER_ROUTES')){
       $routes = ROUTER_ROUTES;
@@ -43,6 +35,73 @@ class phpRouter {
       }
     }
     $this->load();
+  }
+
+  protected function genHTAccess(){
+    if($this->Path == null){ $this->Path = dirname(\Composer\Factory::getComposerFile()); }
+    if(!is_file($this->Path . '/.htaccess')){
+      $htaccess = "<IfModule mod_rewrite.c>\n";
+      $htaccess .= "  RewriteEngine On\n";
+      $htaccess .= "  RewriteBase /\n";
+      $htaccess .= "  RewriteCond %{REQUEST_FILENAME} !-d\n";
+      $htaccess .= "  RewriteCond %{REQUEST_FILENAME} !-f\n";
+      $htaccess .= "  RewriteRule ^(.+)$ index.php [QSA,L]\n";
+      $htaccess .= "</IfModule>\n";
+      file_put_contents($this->Path . '/.htaccess', $htaccess);
+    }
+  }
+
+  protected function checkRequirements(){
+    if(defined('ROUTER_REQUIREMENTS') && is_array(ROUTER_REQUIREMENTS)){
+      foreach(ROUTER_REQUIREMENTS as $type => $modules){
+        foreach($modules as $module){
+          if(!isset($this->Requirements["MODULES"][$type])){ $this->Requirements["MODULES"][$type] = []; }
+          if(!in_array($module,$this->Requirements["MODULES"][$type])){ $this->Requirements["MODULES"][$type][] = $module; }
+        }
+      }
+    }
+    foreach($this->Requirements as $type => $requirement){
+      switch(strtoupper($type)){
+        case"MODULES":
+          foreach($requirement as $server => $modules){
+            foreach($modules as $module){
+              switch(strtoupper($server)){
+                case"APACHE":
+                  if(function_exists('apache_get_modules')){
+                    if(!in_array(strtolower($module),apache_get_modules())){
+                      $this->sendOutput('This application requires the '.strtoupper($server).' module: '.strtolower($module).'.', array('HTTP/1.1 500 Internal Error'));
+                    }
+                  } else {
+                    $this->sendOutput('This application requires a '.strtoupper($requirement).' server.', array('HTTP/1.1 500 Internal Error'));
+                  }
+                  break;
+                case"PHP":
+                  if(!in_array(get_loaded_extensions(strtolower($module)))){
+                    $this->sendOutput('This application requires the '.strtoupper($server).' module: '.strtolower($module).'.', array('HTTP/1.1 500 Internal Error'));
+                  }
+                  break;
+              }
+            }
+          }
+          break;
+        case"SERVER":
+          if(strtoupper($requirement) == "APACHE" && strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false){
+            $this->sendOutput('This application requires a '.strtoupper($requirement).' server.', array('HTTP/1.1 500 Internal Error'));
+          }
+          break;
+      }
+    }
+  }
+
+  protected function sendOutput($data, $httpHeaders=array()) {
+    header_remove('Set-Cookie');
+    if (is_array($httpHeaders) && count($httpHeaders)) {
+      foreach ($httpHeaders as $httpHeader) {
+        header($httpHeader);
+      }
+    }
+    echo $data;
+    exit;
   }
 
   public function getURI(){ return $this->URI; }
