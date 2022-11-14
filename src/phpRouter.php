@@ -9,6 +9,7 @@ use Composer\Factory;
 class phpRouter {
 
   protected $URI = null;
+  protected $Vars = null;
   protected $Route = null;
   protected $Routes = [];
   protected $Path = null;
@@ -18,6 +19,7 @@ class phpRouter {
   public function __construct() {
     if($this->URI == null){ $this->URI = $_SERVER['REQUEST_URI']; }
     if($this->URI == ''){ $this->URI = '/'; }
+    $this->URI = explode('?',$this->URI)[0];
     if($this->Path == null){ $this->Path = dirname(\Composer\Factory::getComposerFile()); }
     if(!is_file($this->Path . '/.htaccess')){
       $htaccess = "<IfModule mod_rewrite.c>\n";
@@ -45,9 +47,26 @@ class phpRouter {
 
   public function getURI(){ return $this->URI; }
 
+  public function getRoute(){ return $this->Route; }
+
   public function getView(){ return $this->View; }
 
   public function getTemplate(){ return $this->Template; }
+
+  public function parseURI(){
+    if($this->Vars == null){
+      if(count(explode('?',$_SERVER['REQUEST_URI'])) > 1){
+        $vars = explode('?',$_SERVER['REQUEST_URI'])[1];
+        $this->Vars = [];
+        foreach(explode('&',$vars) as $var){
+          $params = explode('=',$var);
+          if(count($params) > 1){ $this->Vars[$params[0]] = $params[1]; }
+          else { $this->Vars[$params[0]] = true; }
+        }
+      }
+    }
+    return $this->Vars;
+  }
 
   public function add($route, $view, $template = null){
     if(is_file($view) && (is_file($template) || $template == null)){

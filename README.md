@@ -86,7 +86,30 @@ $phpRouter = new phpRouter();
 $phpRouter->add('/', __DIR__ . '/View/index.php');
 ```
 
-### Forcing a View
+### Parsing URL for Variables
+This is done using the ```parseURI``` method.
+```php
+$phpRouter->parseURI();
+```
+
+#### Example
+```php
+
+//Import API class into the global namespace
+//These must be at the top of your script, not inside a function
+use LaswitchTech\phpRouter\phpRouter;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
+
+//Initiate phpRouter
+$phpRouter = new phpRouter();
+
+//Parsing URL Variables
+$phpRouter->parseURI();
+```
+
+### Forcing a specific View
 This is done using the ```load``` method.
 ```php
 $phpRouter->load(ROUTE | NULL = REQUEST_URI);
@@ -105,15 +128,17 @@ require 'vendor/autoload.php';
 //Initiate phpRouter
 $phpRouter = new phpRouter();
 
-//Add Routes
+//Loading route "500"
 $phpRouter->load("500");
 ```
 
-### Rendering a View
+### Rendering the View
 This is done using the ```render``` method.
 ```php
 $phpRouter->render();
 ```
+
+Note that you can also access the router within the view & template file using ```$this``` as your reference. For exemple : ```$this->parseURI();```.
 
 #### Example
 ```php
