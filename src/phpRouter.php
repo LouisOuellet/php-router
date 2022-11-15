@@ -30,7 +30,9 @@ class phpRouter {
         foreach($routes as $route => $param){
           if(isset($param['view'])){ $view = $param['view']; } else { $view = null; }
           if(isset($param['template'])){ $template = $param['template']; } else { $template = null; }
-          $this->add($route, $view, $template);
+          if(isset($param['public'])){ $public = $param['public']; } else { $public = true; }
+          if(isset($param['error'])){ $error = $param['error']; } else { $error = null; }
+          $this->add($route, $view, $template, $public, $error);
         }
       }
     }
@@ -108,9 +110,13 @@ class phpRouter {
 
   public function getRoute(){ return $this->Route; }
 
+  public function getRoutes(){ return array_keys($this->Routes); }
+
   public function getView(){ return $this->View; }
 
   public function getTemplate(){ return $this->Template; }
+
+  public function isConnected(){ return isset($_SESSION,$_SESSION['ID']); }
 
   public function parseURI(){
     if($this->Vars == null){
@@ -127,9 +133,9 @@ class phpRouter {
     return $this->Vars;
   }
 
-  public function add($route, $view, $template = null){
+  public function add($route, $view, $template = null, $public = true, $error = null){
     if(is_file($view) && (is_file($template) || $template == null)){
-      $this->Routes[$route] = [ "view" => $view, "template" => $template ];
+      $this->Routes[$route] = [ "view" => $view, "template" => $template, "public" => $public, "error" => $error ];
       return true;
     }
     return false;
@@ -138,9 +144,26 @@ class phpRouter {
   public function load($route = null){
     if($route == null) { $route = $this->URI; }
     if(isset($this->Routes[$route])){
+      if($this->Routes[$route]['error'] != null){
+        if($this->Routes[$route]['public'] && $this->isConnected()){
+          $route = $this->Routes[$route]['error'];
+        }
+        if(!$this->Routes[$route]['public'] && !$this->isConnected()){
+          $route = $this->Routes[$route]['error'];
+        }
+      }
+    } else {
+      $route = '404';
+    }
+    return $this->set($route);
+  }
+
+  protected function set($route){
+    if($route == null) { $route = $this->URI; }
+    if(isset($this->Routes[$route])){
       $this->Route = $route;
-      $this->View = $this->Routes[$route]['view'];
-      $this->Template = $this->Routes[$route]['template'];
+      $this->View = $this->Routes[$this->Route]['view'];
+      $this->Template = $this->Routes[$this->Route]['template'];
       return true;
     } else {
       $this->Route = '404';

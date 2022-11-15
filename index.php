@@ -9,8 +9,9 @@ require 'vendor/autoload.php';
 
 //Defining Routes
 define('ROUTER_ROUTES',[
-  "/" => ["view" => "View/index.php"],
-  "404" => ["view" => "View/404.php", "template" => "Template/index.php"],
+  "404" => ["view" => "View/404.php"],
+  "/" => ["view" => "View/index.php", "template" => "Template/index.php", "public" => false, "error" => "/signin"],
+  "/signin" => ["view" => "View/signin.php"],
   "/info" => ["view" => "View/info.php"],
 ]);
 

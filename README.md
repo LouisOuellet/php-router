@@ -66,11 +66,22 @@ define("ROUTER_REQUIREMENTS", ["APACHE" => ["module1","module2"],"PHP" => ["modu
 ### Routes
 Routes are what indicates the router which file to provide. For example for a route ```/``` the router will load with the file ```View/index.php```.
 
+#### Available Parameters
+Routes have multiple parameters. Here is a list:
+* ```view = NULL```: This indicates the view file you want to render.
+* ```template = NULL```: This indicates the template file you want to render. The template file always overwrites the view file.
+* ```public = true```: This indicates wether or not a route is public. This is done by looking if ```$_SESSION['ID']``` exist.
+* ```error = NULL```: This indicates the route to use if the public parameter is not met.
+
 #### Defining Routes
 You can define routes before loading/initiating the phpRouter. Note that specifying a template is optional.
 ```php
-define("ROUTER_ROUTES", ['/' => ["view" => __DIR__ . '/View/index.php',"template" => __DIR__ . '/Template/index.php']]);
-define("ROUTER_ROUTES", ['404' => ["view" => __DIR__ . '/View/404.php']]);
+define('ROUTER_ROUTES',[
+  "404" => ["view" => "View/404.php"],
+  "/" => ["view" => "View/index.php", "template" => "Template/index.php", "public" => false, "error" => "/signin"],
+  "/signin" => ["view" => "View/signin.php"],
+  "/info" => ["view" => "View/info.php"],
+]);
 ```
 
 #### Adding Routes
