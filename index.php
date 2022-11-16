@@ -9,10 +9,11 @@ require 'vendor/autoload.php';
 
 //Defining Routes
 define('ROUTER_ROUTES',[
-  "404" => ["view" => "View/404.php"],
+  "404" => ["view" => "View/404.php", "label" => "404 - Not Found"],
   "/" => ["view" => "View/index.php", "template" => "Template/index.php", "public" => false, "error" => "/signin"],
   "/signin" => ["view" => "View/signin.php"],
   "/info" => ["view" => "View/info.php"],
+  "/install" => ["view" => "View/install.php"],
 ]);
 
 //Defining Requirements

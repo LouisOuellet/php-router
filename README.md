@@ -79,32 +79,9 @@ You can define routes before loading/initiating the phpRouter. Note that specify
 define('ROUTER_ROUTES',[
   "404" => ["view" => "View/404.php"],
   "/" => ["view" => "View/index.php", "template" => "Template/index.php", "public" => false, "error" => "/signin"],
-  "/signin" => ["view" => "View/signin.php"],
-  "/info" => ["view" => "View/info.php"],
+  "/signin" => ["view" => "View/signin.php", "label" => "Sign In"],
+  "/info" => ["view" => "View/info.php", "label" => "PHP Info"],
 ]);
-```
-
-#### Adding Routes
-This is done using the ```add``` method.
-```php
-$phpRouter->add(ROUTE, PATH_TO_VIEW_FILE, PATH_TO_TEMPLATE_FILE = NULL);
-```
-
-##### Example
-```php
-
-//Import API class into the global namespace
-//These must be at the top of your script, not inside a function
-use LaswitchTech\phpRouter\phpRouter;
-
-//Load Composer's autoloader
-require 'vendor/autoload.php';
-
-//Initiate phpRouter
-$phpRouter = new phpRouter();
-
-//Add Routes
-$phpRouter->add('/', __DIR__ . '/View/index.php');
 ```
 
 ### Parsing URL for Variables

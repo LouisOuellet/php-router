@@ -14,6 +14,7 @@ class phpRouter {
   protected $Routes = [];
   protected $Path = null;
   protected $View = null;
+  protected $Label = null;
   protected $Template = null;
   protected $Requirements = ["SERVER" => "APACHE","MODULES" => ["APACHE" => ["mod_rewrite"]]];
 
@@ -32,7 +33,8 @@ class phpRouter {
           if(isset($param['template'])){ $template = $param['template']; } else { $template = null; }
           if(isset($param['public'])){ $public = $param['public']; } else { $public = true; }
           if(isset($param['error'])){ $error = $param['error']; } else { $error = null; }
-          $this->add($route, $view, $template, $public, $error);
+          if(isset($param['label'])){ $label = $param['label']; } else { $label = null; }
+          $this->add($route, $view, $template, $label, $public, $error);
         }
       }
     }
@@ -110,6 +112,8 @@ class phpRouter {
 
   public function getRoute(){ return $this->Route; }
 
+  public function getLabel(){ return $this->Label; }
+
   public function getRoutes(){ return array_keys($this->Routes); }
 
   public function getView(){ return $this->View; }
@@ -133,7 +137,7 @@ class phpRouter {
     return $this->Vars;
   }
 
-  public function add($route, $view, $template = null, $public = true, $error = null){
+  protected function add($route, $view, $template = null, $label = null, $public = true, $error = null){
     if(is_file($view) && (is_file($template) || $template == null)){
       $this->Routes[$route] = [ "view" => $view, "template" => $template, "public" => $public, "error" => $error ];
       return true;
@@ -164,11 +168,13 @@ class phpRouter {
       $this->Route = $route;
       $this->View = $this->Routes[$this->Route]['view'];
       $this->Template = $this->Routes[$this->Route]['template'];
+      $this->Label = $this->Routes[$this->Route]['label'];
       return true;
     } else {
       $this->Route = '404';
       $this->View = $this->Routes['404']['view'];
       $this->Template = $this->Routes['404']['template'];
+      $this->Label = $this->Routes['404']['label'];
     }
     return false;
   }
