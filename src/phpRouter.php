@@ -116,7 +116,7 @@ class phpRouter {
 
   public function getRoutes(){ return array_keys($this->Routes); }
 
-  public function getView(){ return $this->View; }
+  public function getView(){ require $this->View;return $this->View; }
 
   public function getTemplate(){ return $this->Template; }
 
