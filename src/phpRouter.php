@@ -116,7 +116,7 @@ class phpRouter {
 
   public function getTemplate(){ return $this->Template; }
 
-  public function isConnected(){ return isset($_SESSION,$_SESSION['ID']); }
+  public function isConnected(){ return isset($_SESSION) && !empty($_SESSION); }
 
   public function parseURI(){
     if($this->Vars == null){
