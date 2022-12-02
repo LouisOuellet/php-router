@@ -41,6 +41,10 @@ class phpRouter {
     $this->load();
   }
 
+  public function __call($name, $arguments) {
+    return [ "error" => "[".$name."] 501 Not Implemented" ];
+  }
+
   protected function genHTAccess(){
     if($this->Path == null){ $this->Path = dirname(\Composer\Factory::getComposerFile()); }
     if(!is_file($this->Path . '/.htaccess')){
