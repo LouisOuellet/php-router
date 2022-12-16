@@ -48,7 +48,9 @@ class phpRouter {
   protected function genHTAccess(){
     if($this->Path == null){ $this->Path = dirname(\Composer\Factory::getComposerFile()); }
     if(!is_file($this->Path . '/.htaccess')){
-      $htaccess = "<IfModule mod_rewrite.c>\n";
+      $htaccess = "Options All -Indexes\n";
+      $htaccess .= "\n";
+      $htaccess .= "<IfModule mod_rewrite.c>\n";
       $htaccess .= "  RewriteEngine On\n";
       $htaccess .= "  RewriteBase /\n";
       $htaccess .= "  RewriteCond %{REQUEST_FILENAME} !-d\n";
@@ -57,6 +59,7 @@ class phpRouter {
       $htaccess .= "  RewriteRule ^config/.*$ - [F,L]\n";
       $htaccess .= "  RewriteRule ^tmp/.*$ - [F,L]\n";
       $htaccess .= "  RewriteRule ^cli - [F,L]\n";
+      $htaccess .= "  RewriteRule ^.htaccess - [F,L]\n";
       $htaccess .= "</IfModule>\n";
       file_put_contents($this->Path . '/.htaccess', $htaccess);
     }
