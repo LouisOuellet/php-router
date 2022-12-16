@@ -45,7 +45,7 @@ class phpRouter {
     return [ "error" => "[".$name."] 501 Not Implemented" ];
   }
 
-  protected function set($array = []){
+  protected function configure($array = []){
     try {
       $config = [];
       $this->mkdir('config');
