@@ -45,6 +45,41 @@ class phpRouter {
     return [ "error" => "[".$name."] 501 Not Implemented" ];
   }
 
+  protected function set($array = []){
+    try {
+      $config = [];
+      $this->mkdir('config');
+      if(is_file($this->Path . '/config/config.json')){
+        $config = json_decode(file_get_contents($this->Path . '/config/config.json'),true);
+      }
+      foreach($array as $key => $value){ $config[$key] = $value; }
+      $json = fopen($this->Path . '/config/config.json', 'w');
+      fwrite($json, json_encode($config, JSON_PRETTY_PRINT));
+      fclose($json);
+      return true;
+    } catch(Exception $error){
+      return false;
+    }
+  }
+
+  protected function configurations(){
+    $config = [];
+    if(is_file($this->Path . '/config/config.json')){
+      $config = json_decode(file_get_contents($this->Path . '/config/config.json'),true);
+    }
+    return $config;
+  }
+
+  protected function mkdir($directory){
+    $make = dirname(__FILE__,3);
+    $directories = explode('/',$directory);
+    foreach($directories as $subdirectory){
+      $make .= '/'.$subdirectory;
+      if(!is_file($make)&&!is_dir($make)){ mkdir($make); }
+    }
+    return $make;
+  }
+
   protected function genHTAccess(){
     if($this->Path == null){ $this->Path = dirname(\Composer\Factory::getComposerFile()); }
     if(!is_file($this->Path . '/.htaccess')){
