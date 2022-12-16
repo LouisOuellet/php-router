@@ -56,7 +56,7 @@ class phpRouter {
       $htaccess .= "  RewriteRule ^(.+)$ index.php [QSA,L]\n";
       $htaccess .= "  RewriteRule ^config/.*$ - [F,L]\n";
       $htaccess .= "  RewriteRule ^tmp/.*$ - [F,L]\n";
-      $htaccess .= "  RewriteRule ^cli$ - [F,L]\n";
+      $htaccess .= "  RewriteRule ^cli - [F,L]\n";
       $htaccess .= "</IfModule>\n";
       file_put_contents($this->Path . '/.htaccess', $htaccess);
     }
