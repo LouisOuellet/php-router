@@ -62,20 +62,24 @@ class phpRouter {
     }
   }
 
-  protected function configurations(){
+  protected function configurations($key = null){
     $config = [];
     if(is_file($this->Path . '/config/config.json')){
       $config = json_decode(file_get_contents($this->Path . '/config/config.json'),true);
+    }
+    if($key != null){
+      if(isset($config[$key])){ return $config[$key]; }
+      return null;
     }
     return $config;
   }
 
   protected function mkdir($directory){
-    $make = dirname(__FILE__,3);
+    $make = $this->Path;
     $directories = explode('/',$directory);
     foreach($directories as $subdirectory){
       $make .= '/'.$subdirectory;
-      if(!is_file($make)&&!is_dir($make)){ mkdir($make); }
+      if(!is_file($make)&&!is_dir($make)){ mkdir($make, 0777, true); }
     }
     return $make;
   }
