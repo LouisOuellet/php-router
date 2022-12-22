@@ -169,7 +169,14 @@ class phpRouter {
 
   public function getTemplate(){ return $this->Template; }
 
-  public function isConnected(){ return isset($_SESSION) && !empty($_SESSION); }
+  public function isConnected(){
+    if(isset($_SESSION) && !empty($_SESSION)){
+      $array = $_SESSION;
+      if(isset($array['csrf'])){ unset($array['csrf']); }
+      return !empty($array);
+    }
+    return false;
+  }
 
   public function parseURI(){
     if($this->Vars == null){
