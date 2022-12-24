@@ -19,6 +19,12 @@ class phpRouter {
   protected $Requirements = ["SERVER" => "APACHE","MODULES" => ["APACHE" => ["mod_rewrite"]]];
 
   public function __construct(){
+
+    // Set Cookie Scope
+    ini_set('session.cookie_samesite', 'None');
+    session_set_cookie_params(['samesite' => 'None']);
+
+    // Configuring Router
     $this->checkRequirements();
     $this->genHTAccess();
     if($this->URI == null){ $this->URI = $_SERVER['REQUEST_URI']; }
