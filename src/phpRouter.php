@@ -196,7 +196,7 @@ class phpRouter {
   }
 
   protected function add($route, $view, $template = null, $label = null, $public = true, $error = null){
-    if($view != null && is_file($view) && (is_file($template) || $template == null)){
+    if($view != null && is_file($view) && ($template == null || is_file($template))){
       $this->Routes[$route] = [ "view" => $view, "template" => $template, "label" => $label, "public" => $public, "error" => $error ];
       return true;
     }
