@@ -20,9 +20,6 @@ class phpRouter {
 
   public function __construct(){
 
-    // Set Cookie Scope
-    ini_set('session.cookie_samesite', 'None');
-
     // Configuring Router
     $this->checkRequirements();
     $this->genHTAccess();
@@ -199,7 +196,7 @@ class phpRouter {
   }
 
   protected function add($route, $view, $template = null, $label = null, $public = true, $error = null){
-    if(is_file($view) && (is_file($template) || $template == null)){
+    if($view != null && is_file($view) && (is_file($template) || $template == null)){
       $this->Routes[$route] = [ "view" => $view, "template" => $template, "label" => $label, "public" => $public, "error" => $error ];
       return true;
     }
