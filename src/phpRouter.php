@@ -89,6 +89,12 @@ class phpRouter {
   protected function genHTAccess(){
     if($this->Path == null){ $this->Path = dirname(\Composer\Factory::getComposerFile()); }
     if(!is_file($this->Path . '/.htaccess')){
+      if(is_file($this->Path . '/View/404.php')){
+        $htaccess = 'ErrorDocument 404 "/View/404.php"\n';
+      }
+      if(is_file($this->Path . '/View/403.php')){
+        $htaccess = 'ErrorDocument 403 "/View/403.php"\n';
+      }
       $htaccess = "Options All -Indexes\n";
       $htaccess .= "\n";
       $htaccess .= "<IfModule mod_rewrite.c>\n";
@@ -99,6 +105,7 @@ class phpRouter {
       $htaccess .= "  RewriteRule ^(.+)$ index.php [QSA,L]\n";
       $htaccess .= "  RewriteRule ^config/.*$ - [F,L]\n";
       $htaccess .= "  RewriteRule ^tmp/.*$ - [F,L]\n";
+      $htaccess .= "  RewriteRule ^data/.*$ - [F,L]\n";
       $htaccess .= "  RewriteRule ^cli - [F,L]\n";
       $htaccess .= "  RewriteRule ^.htaccess - [F,L]\n";
       $htaccess .= "</IfModule>\n";
