@@ -15,6 +15,7 @@ class phpRouter {
   protected $Path = null;
   protected $View = null;
   protected $Label = null;
+  protected $Icon = null;
   protected $Template = null;
   protected $Requirements = ["SERVER" => "APACHE","MODULES" => ["APACHE" => ["mod_rewrite"]]];
 
@@ -42,7 +43,9 @@ class phpRouter {
     if($this->URI == null){ $this->URI = $_SERVER['REQUEST_URI']; }
     if($this->URI == ''){ $this->URI = '/'; }
     $this->URI = explode('?',$this->URI)[0];
+    $this->add('403','View/403.php');
     $this->add('404','View/404.php');
+    $this->add('500','View/500.php');
     if(defined('ROUTER_ROUTES')){
       $routes = ROUTER_ROUTES;
       if(is_array($routes)){
@@ -52,7 +55,8 @@ class phpRouter {
           if(isset($param['public'])){ $public = $param['public']; } else { $public = true; }
           if(isset($param['error'])){ $error = $param['error']; } else { $error = null; }
           if(isset($param['label'])){ $label = $param['label']; } else { $label = null; }
-          $this->add($route, $view, $template, $label, $public, $error);
+          if(isset($param['icon'])){ $icon = $param['icon']; } else { $icon = null; }
+          $this->add($route, $view, $template, $label, $icon, $public, $error);
         }
       }
     }
@@ -161,18 +165,6 @@ class phpRouter {
     $index .= '$phpRouter->render();' . PHP_EOL;
 
     return $index;
-
-    // //Defining Routes
-    // define("ROUTER_ROUTES",[
-    //   "404" => ["view" => "View/404.php", "label" => "404 - Not Found"],
-    //   "/" => ["view" => "View/index.php", "template" => "Template/index.php", "public" => false, "error" => "/signin"],
-    //   "/signin" => ["view" => "View/signin.php"],
-    //   "/info" => ["view" => "View/info.php"],
-    //   "/install" => ["view" => "View/install.php"],
-    // ]);
-    //
-    // //Defining Requirements
-    // define("ROUTER_REQUIREMENTS", ["APACHE" => ["mod_rewrite"]]);
   }
 
   protected function genIndex($webroot){
@@ -193,7 +185,7 @@ class phpRouter {
       }
     }
     $this->genHTAccess();
-    $this->genIndex();
+    $this->genIndex($webroot);
   }
 
   protected function genHTAccess(){
@@ -329,6 +321,8 @@ class phpRouter {
 
   public function getLabel(){ return $this->Label; }
 
+  public function getIcon(){ return $this->Icon; }
+
   public function getRoutes(){ return array_keys($this->Routes); }
 
   public function getView(){ require $this->View;return $this->View; }
@@ -359,7 +353,7 @@ class phpRouter {
     return $this->Vars;
   }
 
-  protected function add($route, $view, $template = null, $label = null, $public = true, $error = null){
+  protected function add($route, $view, $template = null, $label = null, $icon = null, $public = true, $error = null){
     if($view != null){
       $view = ROUTER_ROOT . '/' . $view;
     }
@@ -367,15 +361,9 @@ class phpRouter {
       $template = ROUTER_ROOT . '/' . $template;
     }
     if($view != null && is_file($view) && ($template == null || is_file($template))){
-      $this->Routes[$route] = [ "view" => $view, "template" => $template, "label" => $label, "public" => $public, "error" => $error ];
+      $this->Routes[$route] = [ "view" => $view, "template" => $template, "label" => $label, "icon" => $icon, "public" => $public, "error" => $error ];
       return true;
     }
-    echo "Route: " . json_encode($route,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
-    echo "View: " . json_encode($view,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
-    echo "Template: " . json_encode($template,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
-    echo "Test: " . json_encode($view != null,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
-    echo "Test: " . json_encode(is_file($view) != null,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
-    echo "Test: " . json_encode(($template == null || is_file($template)) != null,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
     return false;
   }
 
@@ -403,6 +391,7 @@ class phpRouter {
       $this->View = $this->Routes[$this->Route]['view'];
       $this->Template = $this->Routes[$this->Route]['template'];
       $this->Label = $this->Routes[$this->Route]['label'];
+      $this->Icon = $this->Routes[$this->Route]['icon'];
       return true;
     } else {
       $this->Route = '404';
@@ -412,6 +401,8 @@ class phpRouter {
       else { $this->Template = null; }
       if(isset($this->Routes['404']['label'])){ $this->Label = $this->Routes['404']['label']; }
       else { $this->Label = null; }
+      if(isset($this->Routes['404']['icon'])){ $this->Icon = $this->Routes['404']['icon']; }
+      else { $this->Icon = null; }
     }
     return false;
   }
