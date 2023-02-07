@@ -338,7 +338,7 @@ class phpRouter {
 
   public function getIcon(){ return $this->Icon; }
 
-  public function getRoutes(){ return array_keys($this->Routes); }
+  public function getRoutes(){ return $this->Routes; }
 
   public function getView(){ return $this->View; }
 

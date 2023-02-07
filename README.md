@@ -131,10 +131,13 @@ In the ```View``` directory let's create ```index.php```. In it you can insert s
 #### Example
 [View/index.php]
 ```html
-<h1>Index</h1>
+<h1><?= $this->getLabel(); ?></h1>
 <ul>
-  <li><a href="/">Home</a></li>
-  <li><a href="/info">Info</a></li>
+  <?php foreach($this->getRoutes() as $route => $param){ ?>
+    <?php if(str_starts_with($route,'/')){ ?>
+      <li><a href="<?= $route ?>"><?= $param['label'] ?></a></li>
+    <?php } ?>
+  <?php } ?>
 </ul>
 <p>Welcome to the platform.</p>
 ```
@@ -150,7 +153,7 @@ In the ```Template``` directory let's create ```index.php```. In it you can inse
     <title><?= $this->getLabel() ?></title>
   </head>
   <body>
-    <?php $this->getView(); ?>
+    <?php require $this->getView(); ?>
   </body>
 </html>
 ```
