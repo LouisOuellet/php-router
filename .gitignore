@@ -8,6 +8,7 @@ composer.phar
 /Controller/
 /Model/
 /View/
+/webroot/
 /Template/
 /src/manifest.json
 *.log
