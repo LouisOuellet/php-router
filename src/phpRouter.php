@@ -238,9 +238,6 @@ class phpRouter {
       $htaccess .= "  RewriteCond %{REQUEST_FILENAME} !-d" . PHP_EOL;
       $htaccess .= "  RewriteCond %{REQUEST_FILENAME} !-f" . PHP_EOL;
       $htaccess .= "  RewriteRule ^(.+)$ index.php [QSA,L]" . PHP_EOL;
-      $htaccess .= "  RewriteRule ^config/.*$ - [F,L]" . PHP_EOL;
-      $htaccess .= "  RewriteRule ^tmp/.*$ - [F,L]" . PHP_EOL;
-      $htaccess .= "  RewriteRule ^data/.*$ - [F,L]" . PHP_EOL;
       $htaccess .= "  RewriteRule ^cli - [F,L]" . PHP_EOL;
       $htaccess .= "  RewriteRule ^.htaccess - [F,L]" . PHP_EOL;
       $htaccess .= "</IfModule>" . PHP_EOL;
