@@ -39,27 +39,14 @@ class phpRouter {
     // Setup Webroot
     $this->genWebroot();
 
+    // Load Routes
+    $this->loadRoutes();
+
     // Configuring Router
     if($this->URI == null){ $this->URI = $_SERVER['REQUEST_URI']; }
     if($this->URI == ''){ $this->URI = '/'; }
     $this->URI = explode('?',$this->URI)[0];
-    $this->add('403','View/403.php');
-    $this->add('404','View/404.php');
-    $this->add('500','View/500.php');
-    if(defined('ROUTER_ROUTES')){
-      $routes = ROUTER_ROUTES;
-      if(is_array($routes)){
-        foreach($routes as $route => $param){
-          if(isset($param['view'])){ $view = $param['view']; } else { $view = null; }
-          if(isset($param['template'])){ $template = $param['template']; } else { $template = null; }
-          if(isset($param['public'])){ $public = $param['public']; } else { $public = true; }
-          if(isset($param['error'])){ $error = $param['error']; } else { $error = null; }
-          if(isset($param['label'])){ $label = $param['label']; } else { $label = null; }
-          if(isset($param['icon'])){ $icon = $param['icon']; } else { $icon = null; }
-          $this->add($route, $view, $template, $label, $icon, $public, $error);
-        }
-      }
-    }
+
     $this->load();
   }
 
@@ -262,7 +249,38 @@ class phpRouter {
     }
   }
 
+  protected function loadRoutes(){
+    $routes = $this->Path . '/config/routes.json';
+    if(is_file($routes)){
+      $routes = json_decode(file_get_contents($routes),true);
+      if(!defined('ROUTER_ROUTES')){
+        define('ROUTER_ROUTES',$routes);
+      }
+    }
+    if(defined('ROUTER_ROUTES')){
+      $routes = ROUTER_ROUTES;
+      if(is_array($routes)){
+        foreach($routes as $route => $param){
+          if(isset($param['view'])){ $view = $param['view']; } else { $view = null; }
+          if(isset($param['template'])){ $template = $param['template']; } else { $template = null; }
+          if(isset($param['public'])){ $public = $param['public']; } else { $public = true; }
+          if(isset($param['error'])){ $error = $param['error']; } else { $error = null; }
+          if(isset($param['label'])){ $label = $param['label']; } else { $label = null; }
+          if(isset($param['icon'])){ $icon = $param['icon']; } else { $icon = null; }
+          $this->add($route, $view, $template, $label, $icon, $public, $error);
+        }
+      }
+    }
+  }
+
   protected function checkRequirements(){
+    $requirements = $this->Path . '/config/requirements.json';
+    if(is_file($requirements)){
+      $requirements = json_decode(file_get_contents($requirements),true);
+      if(!defined('ROUTER_REQUIREMENTS')){
+        define('ROUTER_REQUIREMENTS',$requirements);
+      }
+    }
     if(defined('ROUTER_REQUIREMENTS') && is_array(ROUTER_REQUIREMENTS)){
       foreach(ROUTER_REQUIREMENTS as $type => $modules){
         foreach($modules as $module){
@@ -325,7 +343,7 @@ class phpRouter {
 
   public function getRoutes(){ return array_keys($this->Routes); }
 
-  public function getView(){ require $this->View;return $this->View; }
+  public function getView(){ return $this->View; }
 
   public function getTemplate(){ return $this->Template; }
 
