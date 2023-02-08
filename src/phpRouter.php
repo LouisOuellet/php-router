@@ -359,7 +359,11 @@ class phpRouter {
 
   public function getView(){ return $this->View; }
 
+  public function getViewFile(){ return $this->Path . '/' . $this->View; }
+
   public function getTemplate(){ return $this->Template; }
+
+  public function getTemplateFile(){ return $this->Path . '/' . $this->Template; }
 
   public function isConnected(){
     if(isset($_SESSION) && !empty($_SESSION)){
@@ -386,13 +390,7 @@ class phpRouter {
   }
 
   protected function add($route, $view, $template = null, $label = null, $icon = null, $public = true, $error = null){
-    if($view != null){
-      $view = ROUTER_ROOT . '/' . $view;
-    }
-    if($template != null){
-      $template = ROUTER_ROOT . '/' . $template;
-    }
-    if($view != null && is_file($view) && ($template == null || is_file($template))){
+    if($view != null && is_file($this->Path . '/' . $view) && ($template == null || is_file($this->Path . '/' . $template))){
       $this->Routes[$route] = [ "view" => $view, "template" => $template, "label" => $label, "icon" => $icon, "public" => $public, "error" => $error ];
       return true;
     }
@@ -440,9 +438,8 @@ class phpRouter {
   }
 
   public function render(){
-    // echo json_encode($this->Routes,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     if(!isset($this->Routes[$this->Route]) || $this->Route == '404'){ http_response_code(404); }
-    if($this->Template != null){ require $this->Template; return $this->Template; }
-    if($this->View != null){ require $this->View; return $this->View; }
+    if($this->Template != null){ require $this->getTemplateFile(); return $this->Template; }
+    if($this->View != null){ require $this->getViewFile(); return $this->View; }
   }
 }
