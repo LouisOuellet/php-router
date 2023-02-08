@@ -190,7 +190,7 @@ $this->isConnected();
 ```
 
 ### Load a specific route
-This is done using the ```isConnected``` method.
+This is done using the ```load``` method.
 ```php
 $this->load('info');
 ```
