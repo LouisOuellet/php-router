@@ -23,11 +23,18 @@ class phpRouter {
 
     // Identifying Project Root
     if($this->Path == null){
-      if(defined('ROUTER_ROOT')){
-        $this->Path = ROUTER_ROOT;
+      if(defined('ROOT_PATH')){
+        $this->Path = ROOT_PATH;
       } else {
-        $this->Path = dirname(__DIR__);
+        if(defined('ROUTER_ROOT')){
+          $this->Path = ROUTER_ROOT;
+        } else {
+          $this->Path = dirname(__DIR__);
+        }
       }
+    }
+    if(!defined('ROOT_PATH')){
+      define('ROOT_PATH',$this->Path);
     }
     if(!defined('ROUTER_ROOT')){
       define('ROUTER_ROOT',$this->Path);
@@ -132,23 +139,24 @@ class phpRouter {
     $index = '';
     $index .= '<?php' . PHP_EOL;
     $index .= PHP_EOL;
-    $index .= '//Initiate Session' . PHP_EOL;
+    $index .= '// Initiate Session' . PHP_EOL;
     $index .= 'session_start();' . PHP_EOL;
     $index .= PHP_EOL;
-    $index .= '//Import phpRouter class into the global namespace' . PHP_EOL;
+    $index .= '// Import phpRouter class into the global namespace' . PHP_EOL;
     $index .= 'use LaswitchTech\phpRouter\phpRouter;' . PHP_EOL;
     $index .= PHP_EOL;
+    $index .= '// Define Root Path' . PHP_EOL;
     $index .= 'if(!defined("ROUTER_ROOT")){' . PHP_EOL;
     $index .= '  define("ROUTER_ROOT",dirname(__DIR__));' . PHP_EOL;
     $index .= '}' . PHP_EOL;
     $index .= PHP_EOL;
-    $index .= '//Load Composer\'s autoloader' . PHP_EOL;
+    $index .= '// Load Composer\'s autoloader' . PHP_EOL;
     $index .= 'require ROUTER_ROOT . "/vendor/autoload.php";' . PHP_EOL;
     $index .= PHP_EOL;
-    $index .= '//Initiate phpRouter' . PHP_EOL;
+    $index .= '// Initiate phpRouter' . PHP_EOL;
     $index .= '$phpRouter = new phpRouter();' . PHP_EOL;
     $index .= PHP_EOL;
-    $index .= '//Render Request' . PHP_EOL;
+    $index .= '// Render Request' . PHP_EOL;
     $index .= '$phpRouter->render();' . PHP_EOL;
 
     return $index;
@@ -161,15 +169,24 @@ class phpRouter {
     }
   }
 
+  protected function getDist(){
+    return $this->scandir('dist','directory');
+  }
+
   protected function genWebroot(){
     $webroot = $this->mkdir('webroot');
-    foreach($this->scandir('dist','directory') as $directory){
+    foreach($this->getDist() as $directory){
       if(!str_starts_with($directory,'/')){ $directory = '/' . $directory; }
       $link = $webroot.$directory;
       $target = $this->Path.'/dist'.$directory;
       if(is_dir($target) && !is_dir($link) && !is_file($link)){
         symlink($target, $link);
       }
+    }
+    $link = $webroot.'/api.php';
+    $target = $this->Path.'/api.php';
+    if(is_file($target)){
+      symlink($target, $link);
     }
     $this->genHTAccess();
     $this->genIndex($webroot);
