@@ -185,7 +185,7 @@ class phpRouter {
     }
     $link = $webroot.'/api.php';
     $target = $this->Path.'/api.php';
-    if(is_file($target)){
+    if(!is_file($target)){
       symlink($target, $link);
     }
     $this->genHTAccess();
