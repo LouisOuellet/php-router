@@ -634,31 +634,33 @@ class phpRouter {
     $path = $this->Configurator->root() . $directory;
     if(!str_ends_with($path,'/')){ $path .= '/'; }
     $files = [];
-    foreach(scandir($path) as $file){
-      if($filter){
-        switch(strtoupper($filter)){
-          case"DIRECTORY":
-          case"DIRECTORIES":
-          case"DIR":
-            if(is_dir($path.$file) && !in_array($file,['.','..'])){
-              $files[] = $file;
-            }
-            break;
-          case"FILES":
-          case"FILE":
-            if(is_file($path.$file) && !in_array($file,['.DS_Store'])){
-              $files[] = $file;
-            }
-            break;
-          case"ALL":
-          case"ANY":
-            if((is_file($path.$file) && !in_array($file,['.DS_Store'])) || (is_dir($path.$file) && !in_array($file,['.','..']))){
-              $files[] = $file;
-            }
-            break;
+    if(is_dir($path)){
+      foreach(scandir($path) as $file){
+        if($filter){
+          switch(strtoupper($filter)){
+            case"DIRECTORY":
+            case"DIRECTORIES":
+            case"DIR":
+              if(is_dir($path.$file) && !in_array($file,['.','..'])){
+                $files[] = $file;
+              }
+              break;
+            case"FILES":
+            case"FILE":
+              if(is_file($path.$file) && !in_array($file,['.DS_Store'])){
+                $files[] = $file;
+              }
+              break;
+            case"ALL":
+            case"ANY":
+              if((is_file($path.$file) && !in_array($file,['.DS_Store'])) || (is_dir($path.$file) && !in_array($file,['.','..']))){
+                $files[] = $file;
+              }
+              break;
+          }
+        } else {
+          $files[] = $file;
         }
-      } else {
-        $files[] = $file;
       }
     }
     return $files;
