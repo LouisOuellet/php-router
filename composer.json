@@ -10,12 +10,14 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {
-        "composer/composer": "^2.5"
-    },
     "autoload": {
         "psr-4": {
             "LaswitchTech\\phpRouter\\": "src/"
         }
+    },
+    "require": {
+        "laswitchtech/php-logger": "^1.2",
+        "laswitchtech/php-configurator": "^1.0",
+        "laswitchtech/php-auth": "^3.0"
     }
 }
