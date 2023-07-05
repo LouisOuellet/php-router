@@ -354,11 +354,13 @@ class phpRouter {
     }
 
     // Load Routes
-    foreach($this->Configurator->get('routes','routes') as $route => $param){
+    if($this->Configurator->get('routes','routes')){
+      foreach($this->Configurator->get('routes','routes') as $route => $param){
 
-      // Set Route Parameters
-      if(array_key_exists('view',$param)){
-        $this->add(strval($route), $param['view'], $param);
+        // Set Route Parameters
+        if(array_key_exists('view',$param)){
+          $this->add(strval($route), $param['view'], $param);
+        }
       }
     }
   }
