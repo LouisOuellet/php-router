@@ -57,16 +57,16 @@
         },
         {
             "name": "laswitchtech/php-auth",
-            "version": "v3.0.26",
+            "version": "v3.0.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LouisOuellet/php-auth.git",
-                "reference": "13fe5ec89e3659adc622a2195f7c4807d3265d39"
+                "reference": "3fb6aa741707650227480bdefade3809b5bd1e79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LouisOuellet/php-auth/zipball/13fe5ec89e3659adc622a2195f7c4807d3265d39",
-                "reference": "13fe5ec89e3659adc622a2195f7c4807d3265d39",
+                "url": "https://api.github.com/repos/LouisOuellet/php-auth/zipball/3fb6aa741707650227480bdefade3809b5bd1e79",
+                "reference": "3fb6aa741707650227480bdefade3809b5bd1e79",
                 "shasum": ""
             },
             "require": {
@@ -99,9 +99,9 @@
             "description": "Authentication and Authorization Library for PHP",
             "support": {
                 "issues": "https://github.com/LouisOuellet/php-auth/issues",
-                "source": "https://github.com/LouisOuellet/php-auth/tree/v3.0.26"
+                "source": "https://github.com/LouisOuellet/php-auth/tree/v3.0.27"
             },
-            "time": "2023-04-25T20:15:44+00:00"
+            "time": "2023-07-05T19:34:07+00:00"
         },
         {
             "name": "laswitchtech/php-configurator",
