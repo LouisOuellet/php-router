@@ -57,16 +57,16 @@
         },
         {
             "name": "laswitchtech/php-auth",
-            "version": "v3.0.27",
+            "version": "v3.0.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LouisOuellet/php-auth.git",
-                "reference": "3fb6aa741707650227480bdefade3809b5bd1e79"
+                "reference": "72075e51407bad44c6c41872a8b3769f89538fb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LouisOuellet/php-auth/zipball/3fb6aa741707650227480bdefade3809b5bd1e79",
-                "reference": "3fb6aa741707650227480bdefade3809b5bd1e79",
+                "url": "https://api.github.com/repos/LouisOuellet/php-auth/zipball/72075e51407bad44c6c41872a8b3769f89538fb8",
+                "reference": "72075e51407bad44c6c41872a8b3769f89538fb8",
                 "shasum": ""
             },
             "require": {
@@ -99,9 +99,9 @@
             "description": "Authentication and Authorization Library for PHP",
             "support": {
                 "issues": "https://github.com/LouisOuellet/php-auth/issues",
-                "source": "https://github.com/LouisOuellet/php-auth/tree/v3.0.27"
+                "source": "https://github.com/LouisOuellet/php-auth/tree/v3.0.28"
             },
-            "time": "2023-07-05T19:34:07+00:00"
+            "time": "2023-07-06T18:48:54+00:00"
         },
         {
             "name": "laswitchtech/php-configurator",
@@ -183,16 +183,16 @@
         },
         {
             "name": "laswitchtech/php-database",
-            "version": "v2.3.6",
+            "version": "v2.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/LouisOuellet/php-database.git",
-                "reference": "fa684c7a6bb9725b415a08d68229a14364fdc1e9"
+                "reference": "3c3ef97beb9a672413e5ce442551ed1330a8c7d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LouisOuellet/php-database/zipball/fa684c7a6bb9725b415a08d68229a14364fdc1e9",
-                "reference": "fa684c7a6bb9725b415a08d68229a14364fdc1e9",
+                "url": "https://api.github.com/repos/LouisOuellet/php-database/zipball/3c3ef97beb9a672413e5ce442551ed1330a8c7d0",
+                "reference": "3c3ef97beb9a672413e5ce442551ed1330a8c7d0",
                 "shasum": ""
             },
             "require": {
@@ -221,9 +221,9 @@
             "description": "Database Class for PHP",
             "support": {
                 "issues": "https://github.com/LouisOuellet/php-database/issues",
-                "source": "https://github.com/LouisOuellet/php-database/tree/v2.3.6"
+                "source": "https://github.com/LouisOuellet/php-database/tree/v2.3.8"
             },
-            "time": "2023-04-18T14:00:47+00:00"
+            "time": "2023-07-06T18:47:18+00:00"
         },
         {
             "name": "laswitchtech/php-imap",

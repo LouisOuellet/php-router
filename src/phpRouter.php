@@ -60,6 +60,7 @@ class phpRouter {
     "icon" => null,
     "public" => true,
     "permission" => false,
+    "location" => null,
     "level" => 1,
     "error" => [
       "400" => null, // 400 Error Document // Bad Request
@@ -85,6 +86,7 @@ class phpRouter {
   protected $Label = null;
   protected $Icon = null;
   protected $Template = null;
+  protected $Location = null;
 
   public function __construct(){
 
@@ -529,6 +531,7 @@ class phpRouter {
       $this->Template = $this->Routes[$this->Route]['template'];
       $this->Label = $this->Routes[$this->Route]['label'];
       $this->Icon = $this->Routes[$this->Route]['icon'];
+      $this->Location = $this->Routes[$this->Route]['location'];
 
       // Return true
       return true;
@@ -592,6 +595,8 @@ class phpRouter {
   public function getLabel(){ return $this->Label; }
 
   public function getIcon(){ return $this->Icon; }
+
+  public function getLocation(){ return $this->Location; }
 
   public function getRoutes(){ return $this->Routes; }
 
