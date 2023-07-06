@@ -443,19 +443,19 @@ class phpRouter {
     // Set Namespace as Route
     $namespace = $route;
 
-    if(!$this->isAuthorized()){
+    if(!array_key_exists($route,$this->Routes)){
 
-      // Set Route as 401 - Unauthorized
-      $namespace = '401';
+      // Set Route as 404 - Not Found
+      $namespace = '404';
 
       // Return
       return $this->set($namespace);
     }
 
-    if(!array_key_exists($route,$this->Routes)){
+    if(!$this->Routes[$route]['public'] && !$this->isAuthorized()){
 
-      // Set Route as 404 - Not Found
-      $namespace = '404';
+      // Set Route as 401 - Unauthorized
+      $namespace = '401';
 
       // Return
       return $this->set($namespace);
@@ -601,7 +601,9 @@ class phpRouter {
 
   public function getTemplate(){ return $this->Template; }
 
-  public function getTemplateFile(){ return $this->Configurator->root() . '/' . $this->Template; }
+  public function getTemplateFile(){
+    return $this->Configurator->root() . '/' . $this->Template;
+  }
 
   // Helper Methods
 
