@@ -692,4 +692,41 @@ class phpRouter {
     // Return the permission status
     return ($this->Auth->Authorization !== null && $this->Auth->Authorization->hasPermission($permissionName, $requiredLevel = 1));
   }
+
+  public function menu($location = 'sidebar') {
+    $menu = [];
+    foreach($this->getRoutes() as $route => $param) {
+      if($param['template'] !== $this->getTemplate()) continue;
+      if(!isset($param['location'])) continue;
+      if(is_string($param['location']) && $param['location'] !== $location) continue;
+      if(is_array($param['location']) && !in_array($location,$param['location'])) continue;
+      if(!$param['public'] && !$this->isAuthenticated()) continue;
+      if(!$param['public'] && $param['permission'] && !$this->hasPermission("Route>" . $route, $param['level'])) continue;
+      
+      $parts = array_filter(explode('/', $route));
+      if(empty($parts)) continue;
+      
+      $current = &$menu;
+      $accumulated_route = "";
+      foreach($parts as $part) {
+          $accumulated_route .= "/$part";
+
+          // Create intermediate nodes with default parameters if they don't exist
+          if(!isset($current[$part])) {
+              $current[$part] = ['label' => ucfirst($part), 'icon' => 'default-icon', 'link' => $accumulated_route, 'items' => []];
+          }
+
+          // If we're at the last part of the route, override the parameters with the ones provided in $param
+          if ($part === end($parts)) {
+              $current[$part]['label'] = $param['label'];
+              $current[$part]['icon'] = $param['icon'];
+              $current[$part]['link'] = $route;
+          }
+
+          $current = &$current[$part]['items'];
+      }
+    }
+
+    return $menu;
+  }
 }
